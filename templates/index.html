@@ -1,11 +1,13 @@
 <html lang="en">
     <head>
         <title>DocX</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>
         <h1>Upload Documentation</h1>
         <form id="uploadForm" enctype="multipart/form-data">
-            <input type = "file" id="fileInput" name="file" accept=".pdf">
+            <input type="file" id="fileInput" name="file" accept=".pdf" style="display: none;" />
+            <button type="button" id="customFileButton">Add File</button>
             <button type="submit">Upload</button>
         </form>
         <h2>Answer a Question</h2>
@@ -43,5 +45,10 @@
                 const result = await response.json();
                 alert('Answer: ' +result.answer);
             };
+
+            document.getElementById('customFileButton').onclick = function() {
+                document.getElementById('fileInput').click();
+            };
+
         </script>
     </body>
