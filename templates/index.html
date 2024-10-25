@@ -1,0 +1,47 @@
+<html lang="en">
+    <head>
+        <title>DocX</title>
+    </head>
+    <body>
+        <h1>Upload Documentation</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type = "file" id="fileInput" name="file" accept=".pdf">
+            <button type="submit">Upload</button>
+        </form>
+        <h2>Answer a Question</h2>
+        <form id="qaForm">
+            <textarea id="context" rows="10" cols="50"></textarea><br>
+            <input type="text" id="question" placeholder="Enter your question"><br>
+            <button type="submit">Ask Question</button>
+        </form>
+
+        <script>
+            document.getElementById('uploadForm').onsubmit = async function(event) {
+                event.preventDefault();
+                const fileInput = document.getElementById('fileInput');
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                document.getElementById('context').innerText = result.text;
+            };
+
+            document.getElementById('qaForm').onsubmit = async function(event) {
+                event.preventDefault();
+                const context = document.getElementById('context').value;
+                const question = document.getElementById('question').value;
+                const response = await fetch('/answer', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ context: context, question: question})
+                });
+                const result = await response.json();
+                alert('Answer: ' +result.answer);
+            };
+        </script>
+    </body>
